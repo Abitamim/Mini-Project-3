@@ -29,7 +29,7 @@ void loop() {
     Serial.println("SENSOR 1: " + String(analogRead(SENSOR_ONE)));
     Serial.println("SENSOR 2: " + String(analogRead(SENSOR_TWO)));
     delay(500);
-//    LeftMotor->run(FORWARD);
+    LeftMotor->run(FORWARD);
 }
 
 int nextMove() {
