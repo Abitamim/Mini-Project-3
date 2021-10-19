@@ -6,16 +6,17 @@ const int SENSOR_ONE = A1;
 const int SENSOR_TWO = A2;
 
 Adafruit_MotorShield AFMS = Adafruit_MotorShield(); 
-Adafruit_DCMotor *LeftMotor = AFMS.getMotor(1);
-Adafruit_DCMotor *RightMotor = AFMS.getMotor(2);
+Adafruit_DCMotor *LeftMotor = AFMS.getMotor(2);
+Adafruit_DCMotor *RightMotor = AFMS.getMotor(1);
 
 int rightSensorVal = 0;
 int leftSensorVal = 0;
-const int RIGHT_SENSOR_CAL = 36;
-const int LEFT_SENSOR_CAL = 36;
-int rightSpeed = 150;
-int leftSpeed = 150;
-int slowerSpeed = rightSpeed - 10;
+const int RIGHT_SENSOR_CAL = 300;
+const int LEFT_SENSOR_CAL = 300;
+int rightSpeed = 40;
+int leftSpeed = 40;
+int slowerSpeedRight = 20;
+int slowerSpeedLeft = 20;
 
 int nextMove;
 
@@ -33,20 +34,23 @@ void setup() {
 void loop() {
     Serial.println("SENSOR 1: " + String(analogRead(SENSOR_ONE)));
     Serial.println("SENSOR 2: " + String(analogRead(SENSOR_TWO)));
-    delay(500);
     nextMove = findNextMove();
     Serial.println("Next move: " + String(nextMove)); 
     switch (nextMove) {
       case 0:
         Serial.println("Turning Left");
         turnLeft(100);
+        break;
       case 1:
         Serial.println("Moving forward");
         moveForward(100);
+        break;
       case 2:
         Serial.println("Turning Right");
         turnRight(100);
+        break;
     }
+//    delay(100);
 }
 
 //Returns 1 for straight, 0 for left, 2 for right
@@ -57,22 +61,25 @@ int findNextMove() {
   if (rightSensorVal <= RIGHT_SENSOR_CAL && leftSensorVal <= RIGHT_SENSOR_CAL)
     return 1; //
   if (rightSensorVal > RIGHT_SENSOR_CAL) {
-    return 2;
+    return 0;
   }
-  return 0;
+  return 2;
 }
 
 void moveForward(int ticks) {
+  RightMotor->setSpeed(rightSpeed);
+  LeftMotor->setSpeed(leftSpeed);
   LeftMotor->run(FORWARD);
   RightMotor->run(FORWARD);
-  delay(ticks);
-  LeftMotor->run(RELEASE); 
-  RightMotor->run(RELEASE);
+//  delay(ticks);
+//  LeftMotor->run(RELEASE); 
+//  RightMotor->run(RELEASE);
 }
 
 void turnLeft(int ticks) {
-  LeftMotor->setSpeed(slowerSpeed);
-  LeftMotor->run(FORWARD);
+  LeftMotor->setSpeed(slowerSpeedLeft);
+  RightMotor->setSpeed(slowerSpeedRight);
+  LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
   delay(ticks);
   LeftMotor->run(RELEASE); 
@@ -80,8 +87,9 @@ void turnLeft(int ticks) {
 }
 
 void turnRight(int ticks) {
-  RightMotor->setSpeed(slowerSpeed);
-  RightMotor->run(FORWARD);
+  RightMotor->setSpeed(slowerSpeedRight);
+  LeftMotor->setSpeed(slowerSpeedRight);
+  RightMotor->run(BACKWARD);
   LeftMotor->run(FORWARD);
   delay(ticks);
   LeftMotor->run(RELEASE); 
