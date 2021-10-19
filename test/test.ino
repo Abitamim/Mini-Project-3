@@ -24,7 +24,7 @@ void setup() {
     
     pinMode(SENSOR_ONE, INPUT);
     pinMode(SENSOR_TWO, INPUT);
-    Serial.begin(57600);
+    Serial.begin(9600);
     AFMS.begin();
     LeftMotor->setSpeed(leftSpeed);
     RightMotor->setSpeed(rightSpeed);
@@ -32,21 +32,42 @@ void setup() {
 }
 
 void loop() {
-    Serial.println("SENSOR 1: " + String(analogRead(SENSOR_ONE)));
-    Serial.println("SENSOR 2: " + String(analogRead(SENSOR_TWO)));
+    //Serial.println("SENSOR 1: " + String(analogRead(SENSOR_ONE)));
+    //Serial.println("SENSOR 2: " + String(analogRead(SENSOR_TWO)));
     nextMove = findNextMove();
-    Serial.println("Next move: " + String(nextMove)); 
+    //Serial.println("Next move: " + String(nextMove)); 
     switch (nextMove) {
       case 0:
-        Serial.println("Turning Left");
+        Serial.print(20);
+        Serial.print(",");
+        Serial.print(-20);
+        Serial.print(",");
+        Serial.print(analogRead(SENSOR_ONE));
+        Serial.print(",");
+        Serial.print(analogRead(SENSOR_TWO));
+        //Serial.println("Turning Left");
         turnLeft(100);
         break;
       case 1:
-        Serial.println("Moving forward");
+        Serial.print(40);
+        Serial.print(",");
+        Serial.print(40);
+        Serial.print(",");
+        Serial.print(analogRead(SENSOR_ONE));
+        Serial.print(",");
+        Serial.print(analogRead(SENSOR_TWO));
+        //Serial.println("Moving forward");
         moveForward(100);
         break;
       case 2:
-        Serial.println("Turning Right");
+        Serial.print(-20);
+        Serial.print(",");
+        Serial.print(20);
+        Serial.print(",");
+        Serial.print(analogRead(SENSOR_ONE));
+        Serial.print(",");
+        Serial.print(analogRead(SENSOR_TWO));
+        //Serial.println("Turning Right");
         turnRight(100);
         break;
     }
