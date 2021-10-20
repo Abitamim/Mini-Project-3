@@ -17,7 +17,8 @@ int rightSpeed = 40;
 int leftSpeed = 40;
 int slowerSpeedRight = 20;
 int slowerSpeedLeft = 20;
-
+int multiplier = 1;
+String line = "";
 int nextMove;
 
 void setup() {
@@ -35,12 +36,16 @@ void loop() {
     //Serial.println("SENSOR 1: " + String(analogRead(SENSOR_ONE)));
     //Serial.println("SENSOR 2: " + String(analogRead(SENSOR_TWO)));
     nextMove = findNextMove();
+    line = Serial.read()
+    if (line.substring(0,1) == "M"){
+        multiplier = line.substring(2).toInt()
+    }
     //Serial.println("Next move: " + String(nextMove)); 
     switch (nextMove) {
       case 0:
-        Serial.print(20);
+        Serial.print("20");
         Serial.print(",");
-        Serial.print(-20);
+        Serial.print("-20");
         Serial.print(",");
         Serial.print(analogRead(SENSOR_ONE));
         Serial.print(",");
@@ -49,9 +54,9 @@ void loop() {
         turnLeft(100);
         break;
       case 1:
-        Serial.print(40);
+        Serial.print("40");
         Serial.print(",");
-        Serial.print(40);
+        Serial.print("40");
         Serial.print(",");
         Serial.print(analogRead(SENSOR_ONE));
         Serial.print(",");
@@ -60,13 +65,13 @@ void loop() {
         moveForward(100);
         break;
       case 2:
-        Serial.print(-20);
+        Serial.print("-20");
         Serial.print(",");
-        Serial.print(20);
+        Serial.print("20");
         Serial.print(",");
         Serial.print(analogRead(SENSOR_ONE));
         Serial.print(",");
-        Serial.print(analogRead(SENSOR_TWO));
+        Serial.print(analogRead(SENSOR_TWO);
         //Serial.println("Turning Right");
         turnRight(100);
         break;
@@ -89,8 +94,8 @@ int findNextMove() {
 }
 
 void moveForward(int ticks) {
-  RightMotor->setSpeed(rightSpeed);
-  LeftMotor->setSpeed(leftSpeed);
+  RightMotor->setSpeed(rightSpeed*multiplier);
+  LeftMotor->setSpeed(leftSpeed*multiplier);
   LeftMotor->run(FORWARD);
   RightMotor->run(FORWARD);
 //  delay(ticks);
@@ -99,8 +104,8 @@ void moveForward(int ticks) {
 }
 
 void turnLeft(int ticks) {
-  LeftMotor->setSpeed(slowerSpeedLeft);
-  RightMotor->setSpeed(slowerSpeedRight);
+  LeftMotor->setSpeed(slowerSpeedLeft*multiplier);
+  RightMotor->setSpeed(slowerSpeedRight*multiplier);
   LeftMotor->run(BACKWARD);
   RightMotor->run(FORWARD);
   delay(ticks);
@@ -109,8 +114,8 @@ void turnLeft(int ticks) {
 }
 
 void turnRight(int ticks) {
-  RightMotor->setSpeed(slowerSpeedRight);
-  LeftMotor->setSpeed(slowerSpeedRight);
+  RightMotor->setSpeed(slowerSpeedRight*multiplier);
+  LeftMotor->setSpeed(slowerSpeedRight*multiplier);
   RightMotor->run(BACKWARD);
   LeftMotor->run(FORWARD);
   delay(ticks);
