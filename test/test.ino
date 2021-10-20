@@ -71,6 +71,7 @@ void loop() {
         turnRight(100);
         break;
     }
+    Serial.println();
 //    delay(100);
 }
 
